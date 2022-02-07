@@ -1,13 +1,12 @@
 const jwt = require('jsonwebtoken');
 
-const UserService = require('../services/UserService');
+const LoginService = require('../services/LoginService');
 
 const secret = 'secret';
 
-const adicionarUsuario = async (req, res) => {
+const login = async (req, res) => {
   const user = req.body;
-  console.log(user);
-  const response = await UserService.adicionarUsuario(user);
+  const response = await LoginService.login(user);
   if (response.status !== 200) {
     return res.status(response.status).json({ message: response.message });
   }
@@ -18,9 +17,9 @@ const adicionarUsuario = async (req, res) => {
   const token = jwt.sign({ data: { 
     email: user.email, 
     password: user.password } }, secret, jwtConfig);
-  return res.status(201).json({ token });
+  return res.status(200).json({ token });
 };
 
 module.exports = {
-  adicionarUsuario,
+  login,
 };
