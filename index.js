@@ -15,6 +15,7 @@ app.post('/user', UserController.adicionarUsuario);
 
 app.post('/login', LoginController.login);
 
+app.get('/categories', CategoriesController.pegarCategorias);
 app.post('/categories', CategoriesController.cadastrarCategoria);
 
 app.listen(3000, () => console.log('ouvindo porta 3000!'));

@@ -8,6 +8,12 @@ const cadastrarCategoria = async ({ name }) => {
   return category;
 };
 
+const pegarCategorias = async () => {
+  const categories = await Category.findAll();
+  return categories;
+};
+
 module.exports = {
   cadastrarCategoria,
+  pegarCategorias,
 };  

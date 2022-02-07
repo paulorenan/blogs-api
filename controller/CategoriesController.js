@@ -35,6 +35,20 @@ const cadastrarCategoria = async (req, res) => {
   return res.status(201).json(responseCategory);
 };
 
+const pegarCategorias = async (req, res) => {
+  const token = req.headers.authorization;
+  if (!token) {
+    return res.status(401).json({ message: 'Token not found' });
+  }
+  const response = await verificarToken(token);
+  if (response.status !== 200) {
+    return res.status(response.status).json({ message: response.message });
+  }
+  const categories = await CategoriesService.pegarCategorias();
+  return res.status(200).json(categories);
+};
+
 module.exports = {
   cadastrarCategoria,
+  pegarCategorias,
 };
