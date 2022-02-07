@@ -3,7 +3,7 @@ module.exports = (sequelize, DataTypes) => {
     {
       postid: { type: DataTypes.INTEGER, primaryKey: true, autoIncrement: true },
       categoryid: { type: DataTypes.INTEGER, foreignKey: true },
-    });
+    }, { timestamps: false });
   
     PostCategory.associate = (models) => {
       PostCategory.belongsTo(models.Category, {
