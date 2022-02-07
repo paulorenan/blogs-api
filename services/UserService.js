@@ -73,9 +73,21 @@ const pegarUsuarioId = async (id) => {
   }
 };
 
+const pegarUsuarioEmail = async (email) => {
+  try {
+    const usuario = await User.findOne({ where: { email } });
+    if (!usuario) return { status: 404, message: 'User does not exist' };
+    return usuario;
+  } catch (error) {
+    console.log(error);
+    return { status: 500, message: error.message };
+  }
+};
+
 module.exports = {
   validarNome,
   adicionarUsuario,
   pegarUsuarios,
   pegarUsuarioId,
+  pegarUsuarioEmail,
 };
