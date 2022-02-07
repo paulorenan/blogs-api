@@ -62,8 +62,20 @@ const pegarUsuarios = async () => {
   }
 };
 
+const pegarUsuarioId = async (id) => {
+  try {
+    const usuario = await User.findOne({ where: { id } });
+    if (!usuario) return { status: 404, message: 'User does not exist' };
+    return usuario;
+  } catch (error) {
+    console.log(error);
+    return { status: 500, message: error.message };
+  }
+};
+
 module.exports = {
   validarNome,
   adicionarUsuario,
   pegarUsuarios,
+  pegarUsuarioId,
 };

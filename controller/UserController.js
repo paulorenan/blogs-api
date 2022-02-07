@@ -20,7 +20,6 @@ const verificarToken = (token) => {
 
 const adicionarUsuario = async (req, res) => {
   const user = req.body;
-  console.log(user);
   const response = await UserService.adicionarUsuario(user);
   if (response.status !== 200) {
     return res.status(response.status).json({ message: response.message });
@@ -44,7 +43,25 @@ const pegarUsuarios = async (req, res) => {
   return res.status(200).json(usuarios);
 };
 
+const pegarUsuarioId = async (req, res) => {
+  const token = req.headers.authorization;
+  if (!token) {
+    return res.status(401).json({ message: 'Token not found' });
+  }
+  const response = await verificarToken(token);
+  if (response.status !== 200) {
+    return res.status(response.status).json({ message: response.message });
+  }
+  const { id } = req.params;
+  const usuario = await UserService.pegarUsuarioId(id);
+  if (usuario.status) {
+    return res.status(usuario.status).json({ message: usuario.message });
+  }
+  return res.status(200).json(usuario);
+};
+
 module.exports = {
   adicionarUsuario,
   pegarUsuarios,
+  pegarUsuarioId,
 };
