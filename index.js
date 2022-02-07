@@ -3,6 +3,7 @@ const bodyParser = require('body-parser');
 
 const UserController = require('./controller/UserController');
 const LoginController = require('./controller/LoginController');
+const CategoriesController = require('./controller/CategoriesController');
 
 const app = express();
 
@@ -13,6 +14,8 @@ app.get('/user/:id', UserController.pegarUsuarioId);
 app.post('/user', UserController.adicionarUsuario);
 
 app.post('/login', LoginController.login);
+
+app.post('/categories', CategoriesController.cadastrarCategoria);
 
 app.listen(3000, () => console.log('ouvindo porta 3000!'));
 
