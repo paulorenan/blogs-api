@@ -52,7 +52,18 @@ const adicionarUsuario = async (user) => {
   }
 };
 
+const pegarUsuarios = async () => {
+  try {
+    const usuarios = await User.findAll();
+    return usuarios;
+  } catch (error) {
+    console.log(error);
+    return { status: 500, message: error.message };
+  }
+};
+
 module.exports = {
   validarNome,
   adicionarUsuario,
+  pegarUsuarios,
 };
