@@ -11,8 +11,8 @@ const jwtConfig = {
 
 const verificarToken = (token) => {
   try {
-    jwt.verify(token, secret, jwtConfig);
-    return { status: 200, message: 'OK' };
+    const user = jwt.verify(token, secret, jwtConfig);
+    return user;
   } catch (e) {
     return { status: 401, message: 'Expired or invalid token' };
   }
@@ -35,8 +35,8 @@ const pegarUsuarios = async (req, res) => {
   if (!token) {
     return res.status(401).json({ message: 'Token not found' });
   }
-  const response = await verificarToken(token);
-  if (response.status !== 200) {
+  const response = verificarToken(token);
+  if (response.status) {
     return res.status(response.status).json({ message: response.message });
   }
   const usuarios = await UserService.pegarUsuarios();
@@ -48,8 +48,8 @@ const pegarUsuarioId = async (req, res) => {
   if (!token) {
     return res.status(401).json({ message: 'Token not found' });
   }
-  const response = await verificarToken(token);
-  if (response.status !== 200) {
+  const response = verificarToken(token);
+  if (response.status) {
     return res.status(response.status).json({ message: response.message });
   }
   const { id } = req.params;
@@ -60,8 +60,26 @@ const pegarUsuarioId = async (req, res) => {
   return res.status(200).json(usuario);
 };
 
+const apagarUsuario = async (req, res) => {
+  const token = req.headers.authorization;
+  if (!token) {
+    return res.status(401).json({ message: 'Token not found' });
+  }
+  const response = verificarToken(token);
+  if (response.status) {
+    return res.status(response.status).json({ message: response.message });
+  }
+  const user = await UserService.pegarUsuarioEmail(response.data.email);
+  if (user.status) {
+    return res.status(user.status).json({ message: user.message });
+  }
+  await UserService.apagarUsuario(user.id);
+  return res.status(204).json({ message: 'Usuário apagado com sucesso' });
+};
+
 module.exports = {
   adicionarUsuario,
   pegarUsuarios,
   pegarUsuarioId,
+  apagarUsuario,
 };

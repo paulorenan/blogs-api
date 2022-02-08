@@ -13,6 +13,7 @@ app.use(bodyParser.json());
 app.get('/user', UserController.pegarUsuarios);
 app.get('/user/:id', UserController.pegarUsuarioId);
 app.post('/user', UserController.adicionarUsuario);
+app.delete('/user/me', UserController.apagarUsuario);
 
 app.post('/login', LoginController.login);
 

@@ -84,10 +84,21 @@ const pegarUsuarioEmail = async (email) => {
   }
 };
 
+const apagarUsuario = async (id) => {
+  try {
+    await User.destroy({ where: { id } });
+    return { status: 200, message: 'OK' };
+  } catch (error) {
+    console.log(error);
+    return { status: 500, message: error.message };
+  }
+};
+
 module.exports = {
   validarNome,
   adicionarUsuario,
   pegarUsuarios,
   pegarUsuarioId,
   pegarUsuarioEmail,
+  apagarUsuario,
 };
