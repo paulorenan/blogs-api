@@ -109,7 +109,7 @@ const editarPost = async (id, post) => {
     if (validar.status) return validar;
     const res = await BlogPost.update({ title, content, updated: new Date() }, { where: { id } });
     if (!res) return { status: 404, message: 'Post does not exist' };
-    const postEdit = await pegarPostId(res[0]);
+    const postEdit = await pegarPostId(id);
     return postEdit;
   } catch (error) {
     console.log(error);
