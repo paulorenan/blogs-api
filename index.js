@@ -23,6 +23,7 @@ app.get('/post', BlogPostController.pegarPosts);
 app.get('/post/:id', BlogPostController.pegarPostId);
 app.post('/post', BlogPostController.adicionarPost);
 app.put('/post/:id', BlogPostController.editarPost);
+app.delete('/post/:id', BlogPostController.apagarPost);
 
 app.listen(3000, () => console.log('ouvindo porta 3000!'));
 

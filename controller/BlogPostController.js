@@ -97,9 +97,27 @@ const editarPost = async (req, res) => {
   return res.status(200).json(postEdit);
 };
 
+const apagarPost = async (req, res) => {
+  const token = req.headers.authorization;
+  const response = validarToken(token);
+  if (response.status) {
+    return res.status(response.status).json({ message: response.message });
+  }
+  const { id } = req.params;
+  const post = await BlogPostService.pegarPostId(id);
+  if (post.status) return res.status(post.status).json({ message: post.message });
+  const user = await UserService.pegarUsuarioId(post.userId);
+  if (response.data.email !== user.email) {
+    return res.status(401).json({ message: 'Unauthorized user' });
+  }
+  const apagar = await BlogPostService.apagarPost(id);
+  return res.status(apagar.status).json({ message: apagar.message });
+};
+
 module.exports = {
   adicionarPost,
   pegarPosts,
   pegarPostId,
   editarPost,
+  apagarPost,
 };

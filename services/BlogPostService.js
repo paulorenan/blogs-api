@@ -117,9 +117,21 @@ const editarPost = async (id, post) => {
   }
 };
 
+const apagarPost = async (id) => {
+  try {
+    const res = await BlogPost.destroy({ where: { id } });
+    if (!res) return { status: 404, message: 'Post does not exist' };
+    return { status: 204, message: 'Post deleted' };
+  } catch (error) {
+    console.log(error);
+    return { status: 500, message: error.message };
+  }
+};
+
 module.exports = {
   adicionarPost,
   pegarPosts,
   pegarPostId,
   editarPost,
+  apagarPost,
 };
