@@ -93,8 +93,33 @@ const pegarPostId = async (id) => {
   }
 };
 
+const validarTitleContent = (title, content) => {
+  if (validarTitle(title).status !== 200) return validarTitle(title);
+  if (validarContent(content).status !== 200) return validarContent(content);
+  return { message: 'ok' };
+};
+
+const editarPost = async (id, post) => {
+  try {
+    if (post.categoryIds) {
+      return { status: 400, message: 'Categories cannot be edited' };
+    }
+    const { title, content } = post;
+    const validar = validarTitleContent(title, content);
+    if (validar.status) return validar;
+    const res = await BlogPost.update({ title, content, updated: new Date() }, { where: { id } });
+    if (!res) return { status: 404, message: 'Post does not exist' };
+    const postEdit = await pegarPostId(res[0]);
+    return postEdit;
+  } catch (error) {
+    console.log(error);
+    return { status: 500, message: error.message };
+  }
+};
+
 module.exports = {
   adicionarPost,
   pegarPosts,
   pegarPostId,
+  editarPost,
 };

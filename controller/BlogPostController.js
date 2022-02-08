@@ -70,8 +70,36 @@ const pegarPostId = async (req, res) => {
   return res.status(200).json(responsePost);
 };
 
+const validarToken = (token) => {
+  if (!token) {
+    return { status: 401, message: 'Token not found' };
+  }
+  const response = verificarToken(token);
+  return response;
+};
+
+const editarPost = async (req, res) => {
+  const token = req.headers.authorization;
+  const response = validarToken(token);
+  if (response.status) {
+    return res.status(response.status).json({ message: response.message });
+  }
+  const { id } = req.params;
+  const post = await BlogPostService.pegarPostId(id);
+  if (post.status) return res.status(post.status).json({ message: post.message });
+  const user = await UserService.pegarUsuarioId(post.userId);
+  if (response.data.email !== user.email) { 
+    return res.status(401).json({ message: 'Unauthorized user' });
+  }
+  const editar = req.body;
+  const postEdit = await BlogPostService.editarPost(id, editar);
+  if (postEdit.status) return res.status(postEdit.status).json({ message: postEdit.message });
+  return res.status(200).json(postEdit);
+};
+
 module.exports = {
   adicionarPost,
   pegarPosts,
   pegarPostId,
+  editarPost,
 };
