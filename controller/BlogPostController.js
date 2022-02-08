@@ -114,10 +114,23 @@ const apagarPost = async (req, res) => {
   return res.status(apagar.status).json({ message: apagar.message });
 };
 
+const procurarPost = async (req, res) => {
+  const token = req.headers.authorization;
+  const response = validarToken(token);
+  if (response.status) {
+    return res.status(response.status).json({ message: response.message });
+  }
+  const { q } = req.query;
+  const post = await BlogPostService.procurarPost(q);
+  if (post.status) return res.status(post.status).json({ message: post.message });
+  return res.status(200).json(post);
+};
+
 module.exports = {
   adicionarPost,
   pegarPosts,
   pegarPostId,
   editarPost,
   apagarPost,
+  procurarPost,
 };

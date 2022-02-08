@@ -21,6 +21,7 @@ app.get('/categories', CategoriesController.pegarCategorias);
 app.post('/categories', CategoriesController.cadastrarCategoria);
 
 app.get('/post', BlogPostController.pegarPosts);
+app.get('/post/search', BlogPostController.procurarPost);
 app.get('/post/:id', BlogPostController.pegarPostId);
 app.post('/post', BlogPostController.adicionarPost);
 app.put('/post/:id', BlogPostController.editarPost);
