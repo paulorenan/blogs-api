@@ -63,10 +63,30 @@ const pegarPosts = async () => {
     {
       model: Category,
       as: 'categories',
-    },
-    ],
+    }],
     });
     return posts;
+  } catch (error) {
+    console.log(error);
+    return { status: 500, message: error.message };
+  }
+};
+
+const pegarPostId = async (id) => {
+  try {
+    const post = await BlogPost.findOne({
+      where: { id },
+      include: [{
+        model: User,
+        as: 'user',
+      },
+      {
+        model: Category,
+        as: 'categories',
+      }],
+    });
+    if (!post) return { status: 404, message: 'Post does not exist' };
+    return post;
   } catch (error) {
     console.log(error);
     return { status: 500, message: error.message };
@@ -76,4 +96,5 @@ const pegarPosts = async () => {
 module.exports = {
   adicionarPost,
   pegarPosts,
+  pegarPostId,
 };

@@ -53,7 +53,25 @@ const pegarPosts = async (req, res) => {
   return res.status(200).json(responsePosts);
 };
 
+const pegarPostId = async (req, res) => {
+  const token = req.headers.authorization;
+  if (!token) {
+    return res.status(401).json({ message: 'Token not found' });
+  }
+  const response = verificarToken(token);
+  if (response.status) {
+    return res.status(response.status).json({ message: response.message });
+  }
+  const { id } = req.params;
+  const responsePost = await BlogPostService.pegarPostId(id);
+  if (responsePost.status) {
+    return res.status(responsePost.status).json({ message: responsePost.message });
+  }
+  return res.status(200).json(responsePost);
+};
+
 module.exports = {
   adicionarPost,
   pegarPosts,
+  pegarPostId,
 };

@@ -20,6 +20,7 @@ app.get('/categories', CategoriesController.pegarCategorias);
 app.post('/categories', CategoriesController.cadastrarCategoria);
 
 app.get('/post', BlogPostController.pegarPosts);
+app.get('/post/:id', BlogPostController.pegarPostId);
 app.post('/post', BlogPostController.adicionarPost);
 
 app.listen(3000, () => console.log('ouvindo porta 3000!'));
