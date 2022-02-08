@@ -37,6 +37,23 @@ const adicionarPost = async (req, res) => {
   return res.status(201).json(responseCategory);
 };
 
+const pegarPosts = async (req, res) => {
+  const token = req.headers.authorization;
+  if (!token) {
+    return res.status(401).json({ message: 'Token not found' });
+  }
+  const response = verificarToken(token);
+  if (response.status) {
+    return res.status(response.status).json({ message: response.message });
+  }
+  const responsePosts = await BlogPostService.pegarPosts();
+  if (responsePosts.status) {
+    return res.status(responsePosts.status).json({ message: responsePosts.message });
+  }
+  return res.status(200).json(responsePosts);
+};
+
 module.exports = {
   adicionarPost,
+  pegarPosts,
 };

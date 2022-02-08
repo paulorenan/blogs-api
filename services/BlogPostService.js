@@ -1,4 +1,4 @@
-const { BlogPost, PostCategory, Category } = require('../models');
+const { BlogPost, Category, User } = require('../models');
 
 const validarTitle = (title) => {
   if (!title) {
@@ -43,10 +43,30 @@ const adicionarPost = async (post, userId) => {
     console.log('post', userId);
     const res = await BlogPost
       .create({ title, content, userId, published: new Date(), updated: new Date() });
-    categoryIds.forEach(async (categorys) => {
-      await PostCategory.create({ postId: res.id, categoryId: categorys });
-    });
+    // categoryIds.forEach(async (categorys) => {
+    //   await PostCategory.create({ postId: res.id, categoryId: categorys });
+    // });
     return { id: res.id, title, content, userId };
+  } catch (error) {
+    console.log(error);
+    return { status: 500, message: error.message };
+  }
+};
+
+const pegarPosts = async () => {
+  try {
+    const posts = await BlogPost.findAll({
+      include: [{
+      model: User,
+      as: 'user',
+    },
+    {
+      model: Category,
+      as: 'categories',
+    },
+    ],
+    });
+    return posts;
   } catch (error) {
     console.log(error);
     return { status: 500, message: error.message };
@@ -55,4 +75,5 @@ const adicionarPost = async (post, userId) => {
 
 module.exports = {
   adicionarPost,
+  pegarPosts,
 };
